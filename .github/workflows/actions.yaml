@@ -1,0 +1,20 @@
+name: push to docker hub
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: docker login
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+
+      - name: build image
+        run: docker build -t sreeram91/k8s-ci-test -f Dockerfile.dev .
+
+      - name: push to hub
+        run: docker push sreeram91/k8s-ci-test
